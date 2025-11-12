@@ -1,8 +1,8 @@
 blueprint:
-  name: "Master Notify (V1.0.0)"
+  name: "Master Notify (V1.0.1)"
   description: |
     <div>
-    <b>Version 1.0.0</b> | 
+    <b>Version 1.0.1</b> | 
     <a href="https://github.com/FourtyNos/master_notify" target="_blank">Github Link</a> |
     <a href="https://ko-fi.com/techindustries" target="_blank">Support me on Ko-Fi</a>
     </div>
@@ -70,15 +70,14 @@ fields:
 
   field_data:
     name: Data
-    default: 
-      icon: mdi:bell
-      color: "#00AAFF"
-      persistent: false
-      tag: trash
+    default: {}
     required: false
     advanced: true
     description: >-
-      Optional extras like: icon_url, notification_icon: mdi:trash-can, persistent: true, tag: trash
+      Optional extras like: 
+      notification_icon: mdi:trash-can
+      persistent: true
+      tag: trash
     selector:
       object: {}
 

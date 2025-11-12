@@ -1,6 +1,7 @@
 # Master Notify 🔔
+Version 1.0.1
 
-A centralized notification management system for your automations
+A centralized notification management script for your automations.
 
 ## Problem
 Managing multiple automation notifications can be challenging when:
