@@ -23,7 +23,7 @@ This script provides a single configuration point for all your automation notifi
 ---
 *Streamline your notification management today!*
 
-[![Add to Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/FourtyNos/Master_Notify)
+[![Add to Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/FourtyNos/master_notify/refs/heads/main/Master_Notify.yaml)
 
 Click the badge to add this script to Home Assistant or follow the documentation to create a script.
 
