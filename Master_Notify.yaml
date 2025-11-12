@@ -1,6 +1,12 @@
 blueprint:
   name: "Master Notify (V1.0.0)"
-  description: >-
+  description: |
+    <div>
+    <b>Version 1.0.0</b> | 
+    <a href="https://github.com/FourtyNos/master_notify" target="_blank">Github Link</a> |
+    <a href="https://ko-fi.com/techindustries" target="_blank">Support me on Ko-Fi</a>
+    </div>
+
     Centralized notification management system for automations. Configure device groups
     (Admin, Family) once and send notifications to mobile apps, Alexa devices, and TTS
     speakers with customizable critical alerts and volume control.
