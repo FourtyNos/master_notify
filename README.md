@@ -1,5 +1,5 @@
 # Master Notify 🔔
-Version 1.0.1
+Version 1.1.0
 
 A centralized notification management script for your automations.
 

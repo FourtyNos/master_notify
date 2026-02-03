@@ -1,8 +1,8 @@
 blueprint:
-  name: "Master Notify (V1.0.1)"
+  name: "Master Notify (V1.1.0)"
   description: |
     <div>
-    <b>Version 1.0.1</b> | 
+    <b>Version 1.1.0</b> | 
     <a href="https://github.com/FourtyNos/master_notify" target="_blank">Github Link</a> |
     <a href="https://ko-fi.com/techindustries" target="_blank">Support me on Ko-Fi</a>
     </div>
@@ -44,6 +44,15 @@ blueprint:
           domain: notify
           integration: alexa_media
           multiple: true
+
+    tts_provider:
+      name: tts provider
+      description: "choose the TTS provider for example: tts.google_translate."
+      default: []
+      selector:
+        entity:
+          domain: tts
+          multiple: false
 
     tts_group_devices:
       name: Google and other TTS Devices
@@ -126,6 +135,7 @@ sequence:
       family: !input user_group_family
       alexa: !input alexa_group_devices
       tts_devices: !input tts_group_devices
+      tts_provider: !input tts_provider
     alias: gather input variables for jinja usage
 
   - variables:
@@ -186,10 +196,9 @@ sequence:
     alias: targets from family for services
 
 
-
   # Alexa: derive media_player.* from notify.alexa_media_*
   - variables:
-      alexa_devices: "{{ targets | select('search', 'notify.alexa_media_') | list }}"
+      alexa_devices: "{{ alexa | select('search', 'notify.alexa_media_') | list }}"
     alias: "alexa_devices : Filter alexa devices from notify services"
 
   - variables:
@@ -240,7 +249,7 @@ sequence:
         {{ out | unique | list }}
 
 
-  # send notify
+  # send notify on Mobiles and Alexa
   - repeat:
       for_each: "{{ targets }}"
       sequence:
@@ -253,9 +262,19 @@ sequence:
     enabled: true
     alias: Send notify
 
+  # TTS Announcement
+  - service: tts.speak
+    target:
+      entity_id: "{{ tts_provider }}"
+    data:
+      cache: true
+      media_player_entity_id: "{{ all_media_player }}"
+      message: "{{ message }}"
+    enabled: true
+
   - delay:
-      seconds: 5
-    alias: wait 5s
+      seconds: "{{ (message | length / 15) | int + 3 }}"
+    alias: wait function
 
   # lower volume
   - alias: Set volume down
@@ -268,15 +287,5 @@ sequence:
           target:
             entity_id: "{{ repeat.item }}"
     enabled: true
-
-  # optional cloud TTS broadcast (disabled)
-  - service: tts.speak
-    enabled: false
-    target:
-      entity_id: tts.home_assistant_cloud
-    data:
-      cache: true
-      media_player_entity_id: "{{ all_media_player }}"
-      message: "{{ message }}"
 
 icon: mdi:message-badge
