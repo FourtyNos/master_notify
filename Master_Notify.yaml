@@ -135,6 +135,7 @@ sequence:
       family: !input user_group_family
       alexa: !input alexa_group_devices
       tts_devices: !input tts_group_devices
+      tts_provider: !input tts_provider
     alias: gather input variables for jinja usage
 
   - variables:
