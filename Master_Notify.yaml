@@ -270,7 +270,7 @@ sequence:
       cache: true
       media_player_entity_id: "{{ all_media_player }}"
       message: "{{ message }}"
-    enabled: "{{ google_enabled }}"
+    enabled: true
 
   - delay:
       seconds: "{{ (message | length / 15) | int + 3 }}"
