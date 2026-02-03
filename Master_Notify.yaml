@@ -195,7 +195,6 @@ sequence:
     alias: targets from family for services
 
 
-
   # Alexa: derive media_player.* from notify.alexa_media_*
   - variables:
       alexa_devices: "{{ targets | select('search', 'notify.alexa_media_') | list }}"
@@ -249,7 +248,7 @@ sequence:
         {{ out | unique | list }}
 
 
-  # send notify
+  # send notify on Mobiles and Alexa
   - repeat:
       for_each: "{{ targets }}"
       sequence:
@@ -261,6 +260,16 @@ sequence:
               {{ (field_data | default({}, true)) | combine(push_data) }}
     enabled: true
     alias: Send notify
+
+  # TTS Announcement
+  - service: tts.speak
+    target:
+      entity_id: "{{ tts_provider }}"
+    data:
+      cache: true
+      media_player_entity_id: "{{ all_media_player }}"
+      message: "{{ message }}"
+    enabled: "{{ google_enabled }}"
 
   - delay:
       seconds: 5
@@ -277,14 +286,5 @@ sequence:
           target:
             entity_id: "{{ repeat.item }}"
     enabled: true
-
-  # TTS Announcement
-  - service: tts.speak
-    target:
-      entity_id: "{{ tts_provider }}"
-    data:
-      cache: true
-      media_player_entity_id: "{{ all_media_player }}"
-      message: "{{ message }}"
 
 icon: mdi:message-badge
