@@ -45,6 +45,15 @@ blueprint:
           integration: alexa_media
           multiple: true
 
+    tts_provider:
+      name: tts provider
+      description: "choose the TTS provider for Google and other TTS Devices."
+      default: []
+      selector:
+        entity:
+          domain: tts
+          multiple: false
+
     tts_group_devices:
       name: Google and other TTS Devices
       description: "choose TTS Devices (just TTS / media_player)."
@@ -269,11 +278,10 @@ sequence:
             entity_id: "{{ repeat.item }}"
     enabled: true
 
-  # optional cloud TTS broadcast (disabled)
+  # TTS Announcement
   - service: tts.speak
-    enabled: false
     target:
-      entity_id: tts.home_assistant_cloud
+      entity_id: "{{ tts_provider }}"
     data:
       cache: true
       media_player_entity_id: "{{ all_media_player }}"
