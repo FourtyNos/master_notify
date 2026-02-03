@@ -47,7 +47,7 @@ blueprint:
 
     tts_provider:
       name: tts provider
-      description: "choose the TTS provider for Google and other TTS Devices."
+      description: "choose the TTS provider for example: tts.google_translate."
       default: []
       selector:
         entity:
