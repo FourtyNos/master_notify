@@ -197,7 +197,7 @@ sequence:
 
   # Alexa: derive media_player.* from notify.alexa_media_*
   - variables:
-      alexa_devices: "{{ targets | select('search', 'notify.alexa_media_') | list }}"
+      alexa_devices: "{{ alexa | select('search', 'notify.alexa_media_') | list }}"
     alias: "alexa_devices : Filter alexa devices from notify services"
 
   - variables:
