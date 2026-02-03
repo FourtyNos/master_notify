@@ -274,7 +274,7 @@ sequence:
 
   - delay:
       seconds: "{{ (message | length / 15) | int + 3 }}"
-    alias: wait 5s
+    alias: wait function
 
   # lower volume
   - alias: Set volume down
