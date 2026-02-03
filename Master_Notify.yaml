@@ -272,7 +272,7 @@ sequence:
     enabled: "{{ google_enabled }}"
 
   - delay:
-      seconds: 5
+      seconds: "{{ (message | length / 15) | int + 3 }}"
     alias: wait 5s
 
   # lower volume
