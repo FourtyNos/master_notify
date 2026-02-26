@@ -313,7 +313,10 @@ sequence:
     enabled: true
     alias: Send notify
 
-
+  # wait that all media devices initiated volume
+  - wait_template: >
+    timeout: "00:00:01"
+    continue_on_timeout: true
 
   # TTS Announcement
   - service: tts.speak
