@@ -35,6 +35,47 @@ blueprint:
           integration: mobile_app
           multiple: true
 
+   # --- Volume Settings ---
+    volume_settings:
+      name: Volume Control
+      description: Configure default volume levels for this blueprint.
+      icon: mdi:volume-high
+      collapsed: false
+      input:
+
+        volume_normal:
+          name: Normal volume
+          description: Volume used for non-critical playback (0.0 - 1.0).
+          default: 0.5
+          selector:
+            number:
+              min: 0
+              max: 1
+              step: 0.05
+              mode: slider
+
+        volume_critical:
+          name: Critical volume
+          description: Volume used when critical is enabled (0.0 - 1.0).
+          default: 0.8
+          selector:
+            number:
+              min: 0
+              max: 1
+              step: 0.05
+              mode: slider
+
+        volume_after:
+          name: After volume
+          description: Volume level set after playback (0.0 - 1.0).
+          default: 0.3
+          selector:
+            number:
+              min: 0
+              max: 1
+              step: 0.05
+              mode: slider
+
     alexa_group_devices:
       name: alexa devices
       description: "choose alexa Devices (just notify alexa)."
@@ -136,6 +177,9 @@ sequence:
       alexa: !input alexa_group_devices
       tts_devices: !input tts_group_devices
       tts_provider: !input tts_provider
+      v_normal: !input volume_normal
+      v_critical: !input volume_critical
+      v_after: !input volume_after
     alias: gather input variables for jinja usage
 
   - variables:
@@ -219,7 +263,7 @@ sequence:
   # volume level
   - variables:
       volume_level: >-
-        {{ 0.8 if critical_enabled else 0.5 }}
+        {{ v_critical if critical_enabled else v_normal }}
     alias: volume level based on critical flag
 
   # raise volume
@@ -283,7 +327,7 @@ sequence:
       sequence:
         - service: media_player.volume_set
           data:
-            volume_level: 0.3
+            volume_level: "{{ v_after }}"
           target:
             entity_id: "{{ repeat.item }}"
     enabled: true
