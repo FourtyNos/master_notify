@@ -262,19 +262,26 @@ sequence:
 
   # volume level
   - variables:
-      volume_level: >-
+      target_volume: >-
         {{ v_critical if critical_enabled else v_normal }}
     alias: volume level based on critical flag
 
-  # raise volume
+  # raise volume only if current volume is lower
   - repeat:
       for_each: "{{ all_media_player }}"
       sequence:
-        - service: media_player.volume_set
-          data:
-            volume_level: "{{ volume_level }}"
-          target:
-            entity_id: "{{ repeat.item }}"
+        - variables:
+            current_volume: "{{ state_attr(repeat.item, 'volume_level') | float(0) }}"
+        - choose:
+            - conditions:
+                - condition: template
+                  value_template: "{{ current_volume < target_volume }}"
+              sequence:
+                - service: media_player.volume_set
+                  target:
+                    entity_id: "{{ repeat.item }}"
+                  data:
+                    volume_level: "{{ target_volume }}"
     enabled: true
 
 
@@ -305,6 +312,8 @@ sequence:
               {{ (field_data | default({}, true)) | combine(push_data) }}
     enabled: true
     alias: Send notify
+
+
 
   # TTS Announcement
   - service: tts.speak
