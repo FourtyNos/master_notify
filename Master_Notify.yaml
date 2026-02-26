@@ -65,16 +65,6 @@ blueprint:
               step: 0.05
               mode: slider
 
-        volume_after:
-          name: After volume
-          description: Volume level set after playback (0.0 - 1.0).
-          default: 0.3
-          selector:
-            number:
-              min: 0
-              max: 1
-              step: 0.05
-              mode: slider
 
     alexa_group_devices:
       name: alexa devices
@@ -179,7 +169,6 @@ sequence:
       tts_provider: !input tts_provider
       v_normal: !input volume_normal
       v_critical: !input volume_critical
-      v_after: !input volume_after
     alias: gather input variables for jinja usage
 
   - variables:
@@ -266,6 +255,19 @@ sequence:
         {{ v_critical if critical_enabled else v_normal }}
     alias: volume level based on critical flag
 
+  # Get the volume of the devices
+  - variables:
+      volumes_before: >-
+        {% set ns = namespace(d={}) %}
+        {% for mp in (all_media_player | default([], true) | list) %}
+          {% set v = state_attr(mp, 'volume_level') %}
+          {% if v is not none %}
+            {% set ns.d = dict(ns.d, **{ mp: (v | float) }) %}
+          {% endif %}
+        {% endfor %}
+        {{ ns.d }}
+    alias: remember previous volume per media_player
+
   # raise volume only if current volume is lower
   - repeat:
       for_each: "{{ all_media_player }}"
@@ -332,16 +334,22 @@ sequence:
       seconds: "{{ (message | length / 15) | int + 3 }}"
     alias: wait function
 
-  # lower volume
-  - alias: Set volume down
+  - alias: Restore previous volume
     repeat:
       for_each: "{{ all_media_player }}"
       sequence:
-        - service: media_player.volume_set
-          data:
-            volume_level: "{{ v_after }}"
-          target:
-            entity_id: "{{ repeat.item }}"
+        - variables:
+            prev: "{{ volumes_before.get(repeat.item) }}"
+        - choose:
+            - conditions:
+                - condition: template
+                  value_template: "{{ prev is not none }}"
+              sequence:
+                - service: media_player.volume_set
+                  target:
+                    entity_id: "{{ repeat.item }}"
+                  data:
+                    volume_level: "{{ prev | float }}"
     enabled: true
 
 icon: mdi:message-badge
