@@ -1,8 +1,8 @@
 blueprint:
-  name: "Master Notify (V1.1.0)"
+  name: "Master Notify (V1.2.0)"
   description: |
     <div>
-    <b>Version 1.1.0</b> | 
+    <b>Version 1.2.0</b> | 
     <a href="https://github.com/FourtyNos/master_notify" target="_blank">Github Link</a> |
     <a href="https://ko-fi.com/techindustries" target="_blank">Support me on Ko-Fi</a>
     </div>
@@ -12,7 +12,7 @@ blueprint:
     speakers with customizable critical alerts and volume control.
   source_url: https://github.com/FourtyNos/master_notify/master_notify.yaml
   homeassistant:
-    min_version: 2024.06.0
+    min_version: 2025.12.0
   author: Fourtynos/master_notify
   domain: script
 
@@ -65,10 +65,9 @@ blueprint:
               step: 0.05
               mode: slider
 
-
     alexa_group_devices:
       name: alexa devices
-      description: "choose alexa Devices (just notify alexa)."
+      description: "choose alexa Devices (just notify alexa/ core integration)."
       default: []
       selector:
         entity:
@@ -331,7 +330,7 @@ sequence:
         then:
           - service: notify.send_message
             target:
-              entity_id: " {{ alexa_devices | default([], true) | list }}"
+              entity_id: "{{ alexa_devices | default([], true) | list }}"
             data:
               message: "{{ message }}"
 

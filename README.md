@@ -1,5 +1,5 @@
 # Master Notify 🔔
-Version 1.1.0
+Version 1.2.0
 
 A centralized notification management script for your automations.
 
@@ -20,6 +20,9 @@ This script provides a single configuration point for all your automation notifi
 - Easier device management
 - Time-saving updates
 - More maintainable automation setup
+
+### example:
+![script_config](./.assets/script_Config.png)
 
 ---
 *Streamline your notification management today!*
